@@ -1,0 +1,11 @@
+<launch>
+	<include file="$(find gazebo_ros)/launch/empty_world.launch">
+		<arg name="world_name" value="$(find fourwheelbot)/worlds/bot.world"/>
+
+	</include>
+<include file="$(find fourwheelbot_control)/launch/fourwheelbot_control.launch" />
+ <param name="robot_description" command="cat '$(find fourwheelbot)/urdf/bot.urdf'" />
+
+    <node name="mybot_spawn" pkg="gazebo_ros" type="spawn_model" output="screen"
+          args="-urdf -param robot_description -model fourwheelbot" />
+</launch>

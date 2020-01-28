@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot name="fourwheelbot">
+  <gazebo reference="chassis">
+    <material>Gazebo/black</material>
+  </gazebo>
+  <gazebo>
+    <plugin filename="libgazebo_ros_control.so" name="gazebo_ros_control">
+      <robotNamespace>/fourwheelbot</robotNamespace>
+    </plugin>
+  </gazebo>
+  <gazebo>
+    <plugin filename="libgazebo_ros_diff_drive.so" name="differential_drive_controller">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>1000</updateRate>
+      <leftJoint>left_wheel_hinge</leftJoint>
+      <rightJoint>right_wheel_hinge</rightJoint>
+      <wheelSeparation>0.2</wheelSeparation>
+      <wheelDiameter>0.2</wheelDiameter>
+      <wheelTorque>20000</wheelTorque>
+      <wheelAcceleration>5000</wheelAcceleration>
+      <commandTopic>fourwheelbot/cmd_vel</commandTopic>
+      <odometryTopic>fourwheelbot/odom_diffdrive</odometryTopic>
+      <odometryFrame>odom</odometryFrame>
+      <robotBaseFrame>footprint</robotBaseFrame>
+    </plugin>
+  </gazebo>
+
+  <gazebo>
+    <plugin filename="libgazebo_ros_diff_drive.so" name="differential_drive_controller">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>1000</updateRate>
+      <leftJoint>left_wheel_hinge_forward</leftJoint>
+      <rightJoint>right_wheel_hinge_forward\</rightJoint>
+      <wheelSeparation>0.2</wheelSeparation>
+      <wheelDiameter>0.2</wheelDiameter>
+      <wheelTorque>20000</wheelTorque>
+      <wheelAcceleration>5000</wheelAcceleration>
+      <commandTopic>fourwheelbot/cmd_vel</commandTopic>
+      <odometryTopic>fourwheelbot/odom_diffdrive</odometryTopic>
+      <odometryFrame>odom</odometryFrame>
+      <robotBaseFrame>footprint</robotBaseFrame>
+    </plugin>
+  </gazebo>
+
+  <material name="black">
+    <color rgba="0.0 0.0 0.0 1.0"/>
+  </material>
+
+  <link name="footprint"/>
+  <joint name="base_joint" type="fixed">
+    <parent link="footprint"/>
+    <child link="chassis"/>
+  </joint>
+  <link name="chassis">
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.1"/>
+      <geometry>
+        <box size="0.4 0.2 0.1"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.1"/>
+      <geometry>
+        <box size="0.4 0.2 0.1"/>
+      </geometry>
+      <material name="orange"/>
+    </visual>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0.1"/>
+      <mass value="50"/>
+      <inertia ixx="0.208333333333" ixy="0" ixz="0" iyy="0.708333333333" iyz="0" izz="0.708333333333"/>
+    </inertial>
+  </link>
+
+  <link name="left_wheel">
+    <collision>
+      <origin rpy="0 1.57079632679 1.57079632679" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.05" radius="0.1"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin rpy="0 1.57079632679 1.57079632679" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.05" radius="0.1"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <inertial>
+      <origin rpy="0 1.57079632679 1.57079632679" xyz="0 0 0"/>
+      <mass value="5"/>
+      <inertia ixx="0.0135416666667" ixy="0" ixz="0" iyy="0.0135416666667" iyz="0" izz="0.025"/>
+    </inertial>
+  </link>
+  <gazebo reference="left_wheel">
+    <mu1 value="1.0"/>
+    <mu2 value="1.0"/>
+    <kp value="10000000.0"/>
+    <kd value="1.0"/>
+    <fdir1 value="1 0 0"/>
+    <material>Gazebo/Black</material>
+  </gazebo>
+  <joint name="left_wheel_hinge" type="continuous">
+    <parent link="chassis"/>
+    <child link="left_wheel"/>
+    <origin rpy="0 0 0" xyz="0.2 0.125 0.1"/>
+    <axis rpy="0 0 0" xyz="0 1 0"/>
+    <limit effort="100" velocity="100"/>
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>
+  <transmission name="left_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="left_wheel_hinge"/>
+    <actuator name="leftMotor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>10</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <link name="right_wheel">
+    <collision>
+      <origin rpy="0 1.57079632679 1.57079632679" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.05" radius="0.1"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin rpy="0 1.57079632679 1.57079632679" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.05" radius="0.1"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <inertial>
+      <origin rpy="0 1.57079632679 1.57079632679" xyz="0 0 0"/>
+      <mass value="5"/>
+      <inertia ixx="0.0135416666667" ixy="0" ixz="0" iyy="0.0135416666667" iyz="0" izz="0.025"/>
+    </inertial>
+  </link>
+  <gazebo reference="right_wheel">
+    <mu1 value="1.0"/>
+    <mu2 value="1.0"/>
+    <kp value="10000000.0"/>
+    <kd value="1.0"/>
+    <fdir1 value="1 0 0"/>
+    <material>Gazebo/Black</material>
+  </gazebo>
+  <joint name="right_wheel_hinge" type="continuous">
+    <parent link="chassis"/>
+    <child link="right_wheel"/>
+    <origin rpy="0 0 0" xyz="0.2 -0.125 0.1"/>
+    <axis rpy="0 0 0" xyz="0 1 0"/>
+    <limit effort="100" velocity="100"/>Red
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>
+  <transmission name="right_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="right_wheel_hinge"/>
+    <actuator name="rightMotor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>10</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <link name="left_wheel_forward">
+    <collision>
+      <origin rpy="0 1.57079632679 1.57079632679" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.05" radius="0.1"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin rpy="0 1.57079632679 1.57079632679" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.05" radius="0.1"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <inertial>
+      <origin rpy="0 1.57079632679 1.57079632679" xyz="0 0 0"/>
+      <mass value="5"/>
+      <inertia ixx="0.0135416666667" ixy="0" ixz="0" iyy="0.0135416666667" iyz="0" izz="0.025"/>
+    </inertial>
+  </link>
+  <gazebo reference="left_wheel_forward">
+    <mu1 value="1.0"/>
+    <mu2 value="1.0"/>
+    <kp value="10000000.0"/>
+    <kd value="1.0"/>
+    <fdir1 value="1 0 0"/>
+    <material>Gazebo/Black</material>
+  </gazebo>
+  <joint name="left_wheel_hinge_forward" type="continuous">
+    <parent link="chassis"/>
+    <child link="left_wheel_forward"/>
+    <origin rpy="0 0 0" xyz="-0.2 0.125 0.1"/>
+    <axis rpy="0 0 0" xyz="0 1 0"/>
+    <limit effort="100" velocity="100"/>
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>
+  <transmission name="left_trans_forward">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="left_wheel_hinge_forward"/>
+    <actuator name="leftMotor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>10</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <link name="right_wheel_forward">
+    <collision>
+      <origin rpy="0 1.57079632679 1.57079632679" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.05" radius="0.1"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin rpy="0 1.57079632679 1.57079632679" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.05" radius="0.1"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <inertial>
+      <origin rpy="0 1.57079632679 1.57079632679" xyz="0 0 0"/>
+      <mass value="5"/>
+      <inertia ixx="0.0135416666667" ixy="0" ixz="0" iyy="0.0135416666667" iyz="0" izz="0.025"/>
+    </inertial>
+  </link>
+  <gazebo reference="right_wheel_forward">
+    <mu1 value="1.0"/>
+    <mu2 value="1.0"/>
+    <kp value="10000000.0"/>
+    <kd value="1.0"/>
+    <fdir1 value="1 0 0"/>
+    <material>Gazebo/Black</material>
+  </gazebo>
+  <joint name="right_wheel_hinge_forward" type="continuous">
+    <parent link="chassis"/>
+    <child link="right_wheel_forward"/>
+    <origin rpy="0 0 0" xyz="-0.2 -0.125 0.1"/>
+    <axis rpy="0 0 0" xyz="0 1 0"/>
+    <limit effort="100" velocity="100"/>
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>
+  <transmission name="right_trans_forward">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="right_wheel_hinge_forward"/>
+    <actuator name="rightMotor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>10</mechanicalReduction>
+    </actuator>
+  </transmission>
+</robot>
